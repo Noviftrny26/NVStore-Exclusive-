@@ -2,12 +2,28 @@
 
 import React, { useState, useEffect } from 'react';
 import { Wallet, ChevronDown, LogOut, Copy, Check, ExternalLink } from 'lucide-react';
-import { useWallet } from '@/context/WalletContext';
+import { useWallet, useWalletModal } from '@/context/WalletContext';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 
+function WalletConnectButton() {
+  const { setVisible } = useWalletModal();
+
+  return (
+    <Button
+      onClick={() => setVisible(true)}
+      leftIcon={<Wallet className="w-4 h-4" />}
+      variant="outline"
+      size="md"
+    >
+      <span className="hidden sm:inline">Connect Wallet</span>
+      <span className="sm:hidden">Wallet</span>
+    </Button>
+  );
+}
+
 export function WalletButton() {
-  const { connected, publicKey, connecting, connect, disconnect, formatAddress } = useWallet();
+  const { connected, publicKey, disconnect, formatAddress } = useWallet();
   const [showDropdown, setShowDropdown] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showDisconnectModal, setShowDisconnectModal] = useState(false);
@@ -133,17 +149,5 @@ export function WalletButton() {
     );
   }
 
-  return (
-    <Button
-      onClick={connect}
-      isLoading={connecting}
-      disabled={connecting}
-      leftIcon={<Wallet className="w-4 h-4" />}
-      variant="outline"
-      size="md"
-    >
-      <span className="hidden sm:inline">Connect Wallet</span>
-      <span className="sm:hidden">Wallet</span>
-    </Button>
-  );
+  return <WalletConnectButton />;
 }
